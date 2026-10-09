@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Todo</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --card: #ffffff;
+    --ink: #1a1d21;
+    --muted: #8a919b;
+    --line: #e8eaee;
+    --accent: #2f6df6;
+    --accent-ink: #ffffff;
+    --danger: #d9414f;
+    --done: #b9c0c9;
+    --shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06);
+  }
+  [data-theme="dark"] {
+    --bg: #0f1115;
+    --card: #171a20;
+    --ink: #e8eaef;
+    --muted: #7d8590;
+    --line: #262b33;
+    --accent: #4d85ff;
+    --accent-ink: #ffffff;
+    --danger: #e56b78;
+    --done: #565e6a;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    transition: background .25s, color .25s;
+    display: flex;
+    justify-content: center;
+    padding: 48px 16px 80px;
+  }
+  .app { width: 100%; max-width: 560px; }
+
+  header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; margin: 0; }
+  .date { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .icon-btn {
+    width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink); cursor: pointer;
+    display: grid; place-items: center; transition: transform .1s, background .15s;
+    box-shadow: var(--shadow);
+  }
+  .icon-btn:hover { background: var(--bg); }
+  .icon-btn:active { transform: scale(.95); }
+  .icon-btn svg { width: 20px; height: 20px; }
+
+  .card {
+    background: var(--card); border-radius: 16px; box-shadow: var(--shadow);
+    border: 1px solid var(--line); overflow: hidden;
+  }
+
+  .composer { display: flex; gap: 8px; padding: 16px; border-bottom: 1px solid var(--line); }
+  .composer input {
+    flex: 1; border: 1px solid var(--line); background: var(--bg);
+    border-radius: 10px; padding: 12px 14px; font: inherit; color: var(--ink);
+    outline: none; transition: border-color .15s, box-shadow .15s;
+  }
+  .composer input::placeholder { color: var(--muted); }
+  .composer input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+  .composer button {
+    border: 0; background: var(--accent); color: var(--accent-ink);
+    font: inherit; font-weight: 600; border-radius: 10px; padding: 0 18px;
+    cursor: pointer; min-width: 64px; transition: filter .15s, transform .1s;
+  }
+  .composer button:hover { filter: brightness(1.08); }
+  .composer button:active { transform: scale(.97); }
+
+  ul { list-style: none; margin: 0; padding: 6px; }
+  li.task {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 8px; border-radius: 10px;
+    animation: pop .18s ease-out;
+  }
+  li.task + li.task { border-top: 1px solid var(--line); border-radius: 4px; }
+  li.task:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+  @keyframes pop { from { opacity: 0; transform: translateY(-4px); } }
+
+  .check {
+    flex: none; width: 22px; height: 22px; border-radius: 7px;
+    border: 2px solid var(--muted); cursor: pointer; background: transparent;
+    display: grid; place-items: center; transition: all .15s; padding: 0;
+  }
+  .check:hover { border-color: var(--accent); }
+  .check svg { width: 13px; height: 13px; stroke: var(--accent-ink); stroke-width: 3;
+    fill: none; opacity: 0; transform: scale(.5); transition: all .15s; }
+  li.done .check { background: var(--accent); border-color: var(--accent); }
+  li.done .check svg { opacity: 1; transform: scale(1); }
+  .check:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .text {
+    flex: 1; min-width: 0; font-size: 15px; cursor: default;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    transition: color .15s;
+  }
+  li.done .text { color: var(--done); text-decoration: line-through; text-decoration-color: var(--done); }
+  .text.editing {
+    white-space: nowrap; overflow: hidden;
+    background: var(--bg); border: 1px solid var(--accent); border-radius: 8px;
+    padding: 6px 10px; outline: none; font: inherit; color: var(--ink); text-decoration: none;
+  }
+
+  .del {
+    flex: none; width: 34px; height: 34px; border-radius: 8px;
+    border: 0; background: transparent; color: var(--muted); cursor: pointer;
+    display: grid; place-items: center; opacity: 0; transition: all .15s;
+  }
+  li.task:hover .del, .del:focus-visible { opacity: 1; }
+  @media (hover: none) { .del { opacity: .6; } }
+  .del:hover { background: color-mix(in srgb, var(--danger) 12%, transparent); color: var(--danger); }
+  .del svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+  .empty {
+    text-align: center; color: var(--muted); padding: 44px 20px; font-size: 15px;
+  }
+  .empty strong { display: block; color: var(--ink); font-size: 17px; margin-bottom: 4px; }
+
+  footer {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 12px 14px; border-top: 1px solid var(--line); flex-wrap: wrap;
+  }
+  .count { color: var(--muted); font-size: 13px; }
+  .filters { display: flex; gap: 4px; }
+  .filters button {
+    border: 1px solid var(--line); background: transparent; color: var(--muted);
+    font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 999px;
+    cursor: pointer; transition: all .15s;
+  }
+  .filters button:hover { color: var(--ink); border-color: var(--muted); }
+  .filters button[aria-pressed="true"] {
+    background: var(--ink); color: var(--card); border-color: var(--ink);
+  }
+  .clear {
+    border: 0; background: transparent; color: var(--muted); font: inherit;
+    font-size: 13px; cursor: pointer; padding: 6px 10px; border-radius: 8px;
+  }
+  .clear:hover { color: var(--danger); }
+  .clear:disabled { opacity: .4; cursor: default; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 16px);
+    background: var(--ink); color: var(--card); font-size: 14px;
+    padding: 12px 18px; border-radius: 12px; box-shadow: var(--shadow);
+    opacity: 0; pointer-events: none; transition: all .25s;
+    display: flex; align-items: center; gap: 14px; z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  .toast button {
+    border: 0; background: transparent; color: var(--accent); font: inherit;
+    font-weight: 700; cursor: pointer; padding: 4px 6px;
+  }
+  .hint { text-align: center; color: var(--muted); font-size: 12px; margin-top: 14px; }
+  kbd {
+    background: var(--card); border: 1px solid var(--line); border-bottom-width: 2px;
+    border-radius: 5px; padding: 1px 5px; font: 11px/1.4 inherit; font-family: inherit;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1>Todo</h1>
+      <div class="date" id="date"></div>
+    </div>
+    <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle theme"></button>
+  </header>
+
+  <div class="card">
+    <div class="composer">
+      <input id="input" type="text" placeholder="What needs to be done?" maxlength="200"
+             autocomplete="off" aria-label="New task text">
+      <button id="add">Add</button>
+    </div>
+
+    <ul id="list"></ul>
+    <div class="empty" id="empty" hidden>
+      <strong>Nothing here</strong>
+      <span id="emptyMsg">Add a task above to get started.</span>
+    </div>
+
+    <footer>
+      <span class="count" id="count"></span>
+      <div class="filters" role="group" aria-label="Filter tasks">
+        <button data-filter="all" aria-pressed="true">All</button>
+        <button data-filter="active" aria-pressed="false">Active</button>
+        <button data-filter="done" aria-pressed="false">Done</button>
+      </div>
+      <button class="clear" id="clear" disabled>Clear done</button>
+    </footer>
+  </div>
+
+  <p class="hint">Double-click a task to edit · <kbd>Enter</kbd> saves · <kbd>Esc</kbd> cancels</p>
+</div>
+
+<div class="toast" id="toast" role="status">
+  <span id="toastMsg"></span>
+  <button id="undo">Undo</button>
+</div>
+
+<script>
+(() => {
+  const LS_KEY = "todos.v1", LS_THEME = "todo.theme";
+  const $ = id => document.getElementById(id);
+  const list = $("list"), input = $("input"), empty = $("empty"), emptyMsg = $("emptyMsg");
+  const countEl = $("count"), clearBtn = $("clear"), toast = $("toast"), toastMsg = $("toastMsg");
+
+  let tasks = load();
+  let filter = "all";
+  let undoTimer = null, lastDeleted = null;
+
+  // ---------- storage ----------
+  function load() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+    catch { return []; }
+  }
+  function save() { localStorage.setItem(LS_KEY, JSON.stringify(tasks)); }
+
+  // ---------- theme ----------
+  const sun = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2.5 12h2M19.5 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  const moon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
+  function applyTheme(t) {
+    document.documentElement.dataset.theme = t;
+    $("themeToggle").innerHTML = t === "dark" ? sun : moon;
+    $("themeToggle").setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+    localStorage.setItem(LS_THEME, t);
+  }
+  const savedTheme = localStorage.getItem(LS_THEME)
+    || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  applyTheme(savedTheme);
+  $("themeToggle").onclick = () =>
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+
+  // ---------- render ----------
+  const checkSVG = '<svg viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7"/></svg>';
+  const trashSVG = '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6.5 7l1 13h9l1-13M10 11v5M14 11v5"/></svg>';
+
+  function visible() {
+    if (filter === "active") return tasks.filter(t => !t.done);
+    if (filter === "done") return tasks.filter(t => t.done);
+    return tasks;
+  }
+
+  function render() {
+    list.innerHTML = "";
+    for (const t of visible()) {
+      const li = document.createElement("li");
+      li.className = "task" + (t.done ? " done" : "");
+      li.dataset.id = t.id;
+
+      const chk = document.createElement("button");
+      chk.className = "check";
+      chk.innerHTML = checkSVG;
+      chk.setAttribute("aria-pressed", t.done);
+      chk.setAttribute("aria-label", t.done ? "Mark as not done" : "Mark as done");
+      chk.onclick = () => { t.done = !t.done; save(); render(); };
+
+      const span = document.createElement("span");
+      span.className = "text";
+      span.textContent = t.text;
+      span.title = "Double-click to edit";
+      span.ondblclick = () => startEdit(li, t);
+      li.append(chk, span);
+
+      const del = document.createElement("button");
+      del.className = "del";
+      del.innerHTML = trashSVG;
+      del.setAttribute("aria-label", "Delete task");
+      del.onclick = () => remove(t.id);
+      li.append(del);
+
+      list.append(li);
+    }
+
+    const shown = visible().length;
+    empty.hidden = shown !== 0;
+    if (!empty.hidden) {
+      emptyMsg.textContent = tasks.length === 0
+        ? "Add a task above to get started."
+        : filter === "active" ? "No active tasks — nice work."
+        : "No completed tasks yet.";
+    }
+
+    const done = tasks.filter(t => t.done).length;
+    countEl.textContent = tasks.length === 0 ? "" :
+      `${tasks.length - done} of ${tasks.length} remaining`;
+    clearBtn.disabled = done === 0;
+  }
+
+  function startEdit(li, t) {
+    const span = li.querySelector(".text");
+    if (span.classList.contains("editing")) return;
+    const ed = document.createElement("input");
+    ed.className = "text editing";
+    ed.value = t.text;
+    ed.maxLength = 200;
+    span.replaceWith(ed);
+    ed.focus(); ed.select();
+    let done_ = false;
+    const commit = () => {
+      if (done_) return; done_ = true;
+      const v = ed.value.trim();
+      if (v && v !== t.text) t.text = v;
+      save(); render();
+    };
+    ed.onblur = commit;
+    ed.onkeydown = e => {
+      if (e.key === "Enter") ed.blur();
+      if (e.key === "Escape") { done_ = true; render(); }
+    };
+  }
+
+  function remove(id) {
+    const i = tasks.findIndex(t => t.id === id);
+    if (i < 0) return;
+    lastDeleted = [i, tasks[i]];
+    tasks.splice(i, 1);
+    save(); render();
+    showToast(`Deleted “${truncate(lastDeleted[1].text)}”`);
+  }
+
+  function clearDone() {
+    const n = tasks.filter(t => t.done).length;
+    if (!n) return;
+    tasks = tasks.filter(t => !t.done);
+    save(); render();
+    showToast(`Cleared ${n} completed task${n > 1 ? "s" : ""}`);
+  }
+
+  // ---------- toast ----------
+  function showToast(msg) {
+    toastMsg.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(undoTimer);
+    undoTimer = setTimeout(() => toast.classList.remove("show"), 5000);
+  }
+  $("undo").onclick = () => {
+    if (lastDeleted) {
+      const [i, t] = lastDeleted;
+      tasks.splice(Math.min(i, tasks.length), 0, t);
+      lastDeleted = null;
+      save(); render();
+    }
+    toast.classList.remove("show");
+  };
+
+  // ---------- add ----------
+  function addTask() {
+    const v = input.value.trim();
+    if (!v) return;
+    tasks.unshift({ id: crypto.randomUUID(), text: v, done: false });
+    input.value = "";
+    save(); render();
+    input.focus();
+  }
+  $("add").onclick = addTask;
+  input.addEventListener("keydown", e => { if (e.key === "Enter") addTask(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
+      e.preventDefault(); input.focus();
+    }
+  });
+
+  // ---------- filters / clear ----------
+  document.querySelectorAll(".filters button").forEach(b => {
+    b.onclick = () => {
+      filter = b.dataset.filter;
+      document.querySelectorAll(".filters button").forEach(x =>
+        x.setAttribute("aria-pressed", x === b));
+      render();
+    };
+  });
+  clearBtn.onclick = clearDone;
+
+  // ---------- init ----------
+  const d = new Date();
+  $("date").textContent = d.toLocaleDateString(undefined,
+    { weekday: "long", month: "long", day: "numeric" });
+  function truncate(s) { return s.length > 28 ? s.slice(0, 28) + "…" : s; }
+  render();
+})();
+</script>
+</body>
+</html>
