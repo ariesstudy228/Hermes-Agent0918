@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Johnny JP｜日式料理・中環</title>
+<meta name="description" content="Johnny JP 是一間融合傳統和食精髓與現代輕奢風格的日式料理餐廳，位於香港中環威靈頓街 88 號。旬之海鮮、板前壽司、備長炭火燒——訂座電話 +852 2888 9988。">
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --paper: #fffdf9;
+    --ink: #1f2421;
+    --ink-2: #5b6058;
+    --ink-3: #8a8f86;
+    --wood: #8a6f4d;
+    --accent: #9c3b2a;      /* vermillion / lacquer red */
+    --gold: #b98c3f;
+    --line: #e3ddd2;
+    --dark: #14110d;
+    --dark-2: #1d1915;
+    --serif: "Noto Serif TC", "Noto Serif", "Songti TC", "PMingLiU", Georgia, serif;
+    --sans: "Noto Sans TC", "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.75 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; }
+
+  .wrap { width: min(1120px, 92vw); margin: 0 auto; }
+
+  /* ---------- nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
+  .brand b { font-family: var(--serif); font-size: 22px; letter-spacing: .04em; }
+  .brand span { font-size: 11px; letter-spacing: .3em; color: var(--ink-3); }
+  .nav ul {
+    display: flex; gap: 28px; list-style: none; margin: 0; padding: 0;
+    font-size: 14px;
+  }
+  .nav ul a { text-decoration: none; color: var(--ink-2); padding: 6px 0; position: relative; }
+  .nav ul a::after {
+    content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 1.5px;
+    background: var(--accent); transition: width .25s;
+  }
+  .nav ul a:hover::after { width: 100%; }
+  .nav .cta {
+    background: var(--ink); color: #fff; text-decoration: none;
+    font-size: 14px; padding: 9px 18px; border-radius: 2px;
+  }
+  .nav .cta:hover { background: var(--accent); }
+  @media (max-width: 760px) { .nav ul { display: none; } }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative; min-height: 86vh;
+    display: grid; align-items: end;
+    background: var(--dark);
+    overflow: hidden;
+  }
+  .hero img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: .82;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(20,17,13,.15) 40%, rgba(20,17,13,.72));
+  }
+  .hero-content { position: relative; z-index: 2; padding: 72px 0 64px; color: #f4efe7; }
+  .hero-eyebrow {
+    font-size: 13px; letter-spacing: .42em; color: var(--gold);
+    margin-bottom: 18px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 64px); line-height: 1.25; margin: 0 0 18px;
+    max-width: 18em; font-weight: 500;
+  }
+  .hero p { max-width: 34em; color: #cfc8ba; margin: 0 0 30px; font-size: 16.5px; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; text-decoration: none; font-size: 15px;
+    padding: 13px 26px; border-radius: 2px; transition: all .2s;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #7f2f21; transform: translateY(-1px); }
+  .btn-ghost { border: 1px solid rgba(244,239,231,.55); color: #f4efe7; }
+  .btn-ghost:hover { border-color: #f4efe7; background: rgba(244,239,231,.08); }
+
+  /* ---------- section scaffold ---------- */
+  section { padding: 92px 0; }
+  .sec-eyebrow {
+    font-size: 12px; letter-spacing: .38em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .sec-title { font-size: clamp(28px, 3.6vw, 40px); margin: 0 0 14px; font-weight: 500; }
+  .sec-sub { color: var(--ink-2); max-width: 40em; }
+
+  /* ---------- about ---------- */
+  .about-grid {
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: 64px; align-items: center;
+  }
+  .about-grid p { color: var(--ink-2); }
+  .about-quote {
+    margin-top: 34px; padding-left: 22px; border-left: 2px solid var(--gold);
+    font-family: var(--serif); font-size: 18px; color: var(--ink); line-height: 1.9;
+  }
+  .about-side { position: relative; }
+  .about-side img { border-radius: 2px; box-shadow: 0 18px 50px rgba(31,36,33,.14); }
+  .about-side .frame {
+    position: absolute; inset: 18px -18px -18px 18px;
+    border: 1px solid var(--wood); z-index: -1;
+  }
+  @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  /* ---------- philosophy ---------- */
+  .philosophy { background: var(--dark); color: #e9e2d5; }
+  .philosophy .sec-eyebrow { color: var(--gold); }
+  .philosophy .sec-sub { color: #a89f8f; }
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 52px; }
+  .pillar {
+    padding: 34px 30px; border: 1px solid rgba(233,226,213,.14);
+    background: var(--dark-2); position: relative;
+  }
+  .pillar .num {
+    font-family: var(--serif); font-size: 40px; color: var(--gold);
+    line-height: 1; margin-bottom: 18px; display: block;
+  }
+  .pillar h3 { font-size: 19px; margin: 0 0 10px; color: #f0e9dc; font-weight: 500; }
+  .pillar p { color: #a89f8f; font-size: 14.5px; margin: 0; }
+  @media (max-width: 900px) { .pillars { grid-template-columns: 1fr; } }
+
+  /* ---------- dishes ---------- */
+  .dishes-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 52px;
+  }
+  .dish-card {
+    background: var(--paper); border: 1px solid var(--line);
+    display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s;
+  }
+  .dish-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(31,36,33,.12); }
+  .dish-img { aspect-ratio: 1; overflow: hidden; background: #e8e2d8; }
+  .dish-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .dish-card:hover .dish-img img { transform: scale(1.05); }
+  .dish-body { padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .dish-body h3 { font-size: 17px; margin: 0; font-weight: 600; }
+  .dish-body p { font-size: 13.5px; color: var(--ink-2); margin: 0; flex: 1; }
+  .dish-link {
+    font-size: 13px; color: var(--accent); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 6px;
+  }
+  .dish-link::after { content: "→"; transition: margin .2s; }
+  .dish-link:hover::after { margin-left: 4px; }
+  .dishes-more { text-align: center; margin-top: 40px; }
+  .dishes-more a { color: var(--accent); text-decoration: none; font-size: 15px; }
+  @media (max-width: 1000px) { .dishes-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .dishes-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- gallery ---------- */
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 52px;
+  }
+  .g-item { overflow: hidden; border-radius: 2px; position: relative; }
+  .g-item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; transition: transform .6s; }
+  .g-item:hover img { transform: scale(1.04); }
+  .g-item figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 26px 18px 14px; font-size: 13px; letter-spacing: .12em; color: #f2ede3;
+    background: linear-gradient(180deg, transparent, rgba(20,17,13,.75));
+  }
+  .g-item.wide { grid-column: span 2; }
+  @media (max-width: 800px) { .gallery-grid { grid-template-columns: 1fr 1fr; } }
+
+  /* ---------- visit (hours + contact) ---------- */
+  .visit { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .hours-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .hours-table td { padding: 13px 0; border-bottom: 1px dashed var(--line); }
+  .hours-table td:first-child { color: var(--ink-2); width: 42%; }
+  .hours-table .closed { color: var(--ink-3); font-size: 13.5px; }
+  .contact-row { display: flex; gap: 14px; align-items: flex-start; padding: 13px 0; border-bottom: 1px dashed var(--line); }
+  .contact-row:last-child { border-bottom: 0; }
+  .contact-row .k { width: 4.5em; flex: none; color: var(--ink-3); font-size: 13px; letter-spacing: .08em; padding-top: 3px; }
+  .contact-row .v { flex: 1; }
+  .contact-row a { text-decoration: none; border-bottom: 1px solid var(--line); }
+  .contact-row a:hover { border-color: var(--accent); color: var(--accent); }
+  .visit-cta { margin-top: 34px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-ink { background: var(--ink); color: #fff; }
+  .btn-ink:hover { background: var(--accent); }
+  .btn-outline { border: 1px solid var(--ink); color: var(--ink); }
+  .btn-outline:hover { background: var(--ink); color: #fff; }
+  @media (max-width: 860px) { .visit-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  /* ---------- footer ---------- */
+  footer { background: var(--dark); color: #b7ae9f; padding: 64px 0 40px; }
+  .foot-top { display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+  .foot-brand b { color: #f0e9dc; font-family: var(--serif); font-size: 24px; display: block; }
+  .foot-brand p { font-size: 13px; margin-top: 10px; max-width: 26em; }
+  .foot-col h4 { font-size: 12px; letter-spacing: .3em; color: var(--gold); margin: 4px 0 14px; font-weight: 600; }
+  .foot-col ul { list-style: none; margin: 0; padding: 0; }
+  .foot-col li { padding: 5px 0; font-size: 14px; }
+  .foot-col a { text-decoration: none; }
+  .foot-col a:hover { color: #f0e9dc; }
+  .foot-bottom {
+    margin-top: 52px; padding-top: 22px; border-top: 1px solid rgba(233,226,213,.12);
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-size: 12.5px; color: #7d7466;
+  }
+  @media (max-width: 860px) { .foot-top { flex-direction: column; } }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s, transform .7s; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="主導航">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <b>Johnny&nbsp;JP</b><span>和食料亭</span>
+    </a>
+    <ul>
+      <li><a href="#about">關於</a></li>
+      <li><a href="#philosophy">理念</a></li>
+      <li><a href="#dishes">菜式</a></li>
+      <li><a href="#gallery">環境</a></li>
+      <li><a href="#visit">聯絡</a></li>
+    </ul>
+    <a class="cta" href="#visit">訂座</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <img src="images/hero.jpg" alt="Johnny JP 餐廳內景：質感木系板前與暗調微光">
+  <div class="wrap hero-content">
+    <div class="hero-eyebrow">Japanese Fine Dining · 中環</div>
+    <h1>傳統和食精髓，<br>現代輕奢饗宴</h1>
+    <p>嚴選日本旬之海鮮與極致職人工藝，於質感木系與暗調微光之間，為您呈現沉靜而別具儀式感嘅味覺體驗。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#visit">立即訂座</a>
+      <a class="btn btn-ghost" href="#dishes">探索菜式</a>
+    </div>
+  </div>
+</header>
+
+<section id="about" class="reveal">
+  <div class="wrap about-grid">
+    <div>
+      <div class="sec-eyebrow">關於我們 · About</div>
+      <h2 class="sec-title">沉靜木色之間，<br>一席和食儀式</h2>
+      <p>Johnny JP 是一間融合傳統和食精髓與現代輕奢風格的日式料理餐廳。餐廳名字中的「Johnny」代表著創新與親和力，「JP」則象徵對日本原生食材與極致職人精神的堅持。</p>
+      <p>全店以質感木系與暗調微光營造出沉靜優雅的用餐氛圍，設有開放式板前席（Bar area）與私密包廂。無論是日常精緻用餐、商務犒賞還是情侶約會，都能帶來放鬆且別具儀式感的饗宴體驗。</p>
+      <div class="about-quote">「讓人在繁忙都市中，找到一處滋養心靈的味覺避風港。」</div>
+    </div>
+    <div class="about-side">
+      <div class="frame"></div>
+      <img src="images/interior_bar.jpg" alt="Johnny JP 開放式板前席">
+    </div>
+  </div>
+</section>
+
+<section id="philosophy" class="philosophy reveal">
+  <div class="wrap">
+    <div class="sec-eyebrow">品牌與料理理念 · Philosophy</div>
+    <h2 class="sec-title">三大支柱，成就每一席</h2>
+    <p class="sec-sub">從產地到盤中，從傳統到當代，從技藝到服務——三個信念貫穿 Johnny JP 的每一個細節。</p>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="num">一</span>
+        <h3>產地直達，旬之味覺</h3>
+        <p>堅持「旬（Shun）」的哲學，嚴選日本每日空運到港的時令海鮮，配合本地有機農場蔬果，呈現四季交替的最純粹風味。</p>
+      </div>
+      <div class="pillar">
+        <span class="num">二</span>
+        <h3>傳統為本，創新為魂</h3>
+        <p>主廚團隊擁有數十年江戶前壽司與關東割烹經驗，在恪守經典解構與熟成技藝的同時，巧妙注入當代料理手法，讓每道菜兼具視覺美感與層次口感。</p>
+      </div>
+      <div class="pillar">
+        <span class="num">三</span>
+        <h3>款待之道 Omotenashi</h3>
+        <p>以無微不至的日式貼心服務為核心，重視每一位顧客的個人喜好與用餐節奏，讓款待成為一種沉靜而溫暖的儀式。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dishes" class="reveal">
+  <div class="wrap">
+    <div class="sec-eyebrow">招牌菜式 · Signature</div>
+    <h2 class="sec-title">每桌必點的風味</h2>
+    <p class="sec-sub">四道招牌菜，展現 Johnny JP 對海鮮、和牛、炭火與米食的執著。每張卡片可前往完整菜單。</p>
+    <div class="dishes-grid">
+      <article class="dish-card">
+        <div class="dish-img"><img src="images/dish_sashimi.jpg" alt="Johnny 熟成特上刺身盛合"></div>
+        <div class="dish-body">
+          <h3>Johnny 熟成特上刺身盛合</h3>
+          <p>獨家乾式熟成技術處理時令魚腩，精確控時控溫，鎖住魚油香氣並極致提昇鮮味。</p>
+          <a class="dish-link" href="menu.html">View Menu</a>
+        </div>
+      </article>
+      <article class="dish-card">
+        <div class="dish-img"><img src="images/dish_wagyu.jpg" alt="火焰黑松露炙燒和牛塔塔"></div>
+        <div class="dish-body">
+          <h3>火焰黑松露炙燒和牛塔塔</h3>
+          <p>A5 級鹿兒島黑毛和牛配現刨黑松露與有機生蛋黃，桌邊炙燒帶出微微焦香。</p>
+          <a class="dish-link" href="menu.html">View Menu</a>
+        </div>
+      </article>
+      <article class="dish-card">
+        <div class="dish-img"><img src="images/dish_uni_roll.jpg" alt="極上海膽海鮮太卷"></div>
+        <div class="dish-body">
+          <h3>極上海膽海鮮太卷</h3>
+          <p>北海道馬糞海膽、鮪魚蓉、三文魚籽與鮮甜牡丹蝦一併捲入，全店每桌必點。</p>
+          <a class="dish-link" href="menu.html">View Menu</a>
+        </div>
+      </article>
+      <article class="dish-card">
+        <div class="dish-img"><img src="images/dish_unagi.jpg" alt="炭火慢烤醬燒鰻魚釜飯"></div>
+        <div class="dish-body">
+          <h3>炭火慢烤醬燒鰻魚釜飯</h3>
+          <p>備長炭現烤活鰻配山形縣輝映米，土鍋慢燉至米粒吸滿精華，底層焦香鍋巴。</p>
+          <a class="dish-link" href="menu.html">View Menu</a>
+        </div>
+      </article>
+    </div>
+    <div class="dishes-more">
+      <a href="menu.html">瀏覽完整菜單 →</a>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" class="reveal">
+  <div class="wrap">
+    <div class="sec-eyebrow">用餐環境 · Ambience</div>
+    <h2 class="sec-title">木色、微光與留白</h2>
+    <p class="sec-sub">開放式板前席、私密包廂與沉靜的細節陳設，為每一席用餐建立專屬的儀式感。</p>
+    <div class="gallery-grid">
+      <figure class="g-item wide">
+        <img src="images/interior_bar.jpg" alt="開放式板前席">
+        <figcaption>開放式板前席 · BAR AREA</figcaption>
+      </figure>
+      <figure class="g-item">
+        <img src="images/interior_private.jpg" alt="私密包廂">
+        <figcaption>私密包廂 · PRIVATE ROOM</figcaption>
+      </figure>
+      <figure class="g-item">
+        <img src="images/interior_detail.jpg" alt="酒器與餐具細節">
+        <figcaption>餐具與清酒細節 · DETAILS</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="visit" class="visit reveal">
+  <div class="wrap">
+    <div class="sec-eyebrow">營業時間與聯絡 · Visit</div>
+    <h2 class="sec-title">歡迎蒞臨</h2>
+    <div class="visit-grid" style="margin-top:40px">
+      <div>
+        <h3 style="font-family:var(--serif);font-size:18px;font-weight:600;margin:0 0 8px">營業時間</h3>
+        <table class="hours-table">
+          <tr><td>午市 Lunch</td><td>12:00 – 15:00<span style="display:block;font-size:12px;color:var(--ink-3)">最後點餐 14:30</span></td></tr>
+          <tr><td>晚市 Dinner</td><td>18:00 – 22:30<span style="display:block;font-size:12px;color:var(--ink-3)">最後點餐 21:45</span></td></tr>
+          <tr><td>休息日</td><td class="closed">每週一逢例休</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3 style="font-family:var(--serif);font-size:18px;font-weight:600;margin:0 0 8px">地址與聯絡</h3>
+        <div class="contact-row"><div class="k">地址</div><div class="v">香港中環威靈頓街 88 號地舖<br><span style="font-size:13px;color:var(--ink-3)">中環地鐵站 D2 出口步行約 5 分鐘</span></div></div>
+        <div class="contact-row"><div class="k">電話</div><div class="v"><a href="tel:+85228889988">+852 2888 9988</a></div></div>
+        <div class="contact-row"><div class="k">WhatsApp</div><div class="v"><a href="https://wa.me/85298887766">+852 9888 7766（訂座）</a></div></div>
+        <div class="contact-row"><div class="k">社交</div><div class="v">Instagram / Facebook：<a href="#" rel="noopener">@johnnyjp.hk</a></div></div>
+        <div class="visit-cta">
+          <a class="btn btn-ink" href="https://wa.me/85298887766">WhatsApp 訂座</a>
+          <a class="btn btn-outline" href="tel:+85228889988">致電訂座</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <b>Johnny JP</b>
+        <p>融合傳統和食精髓與現代輕奢風格的日式料理餐廳，位於香港中環威靈頓街 88 號。</p>
+      </div>
+      <div class="foot-col">
+        <h4>導航</h4>
+        <ul>
+          <li><a href="#about">關於我們</a></li>
+          <li><a href="#philosophy">品牌理念</a></li>
+          <li><a href="#dishes">招牌菜式</a></li>
+          <li><a href="menu.html">完整菜單</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>聯絡</h4>
+        <ul>
+          <li>中環威靈頓街 88 號地舖</li>
+          <li><a href="tel:+85228889988">+852 2888 9988</a></li>
+          <li><a href="https://wa.me/85298887766">WhatsApp 訂座</a></li>
+          <li>@johnnyjp.hk</li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>時間</h4>
+        <ul>
+          <li>午市 12:00 – 15:00</li>
+          <li>晚市 18:00 – 22:30</li>
+          <li>每週一逢例休</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Johnny JP. All rights reserved.</span>
+      <span>菜品價格另加一服務費，最終訂座及供應以店内為準。</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // reveal on scroll
+  const io = new IntersectionObserver(entries => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+</script>
+</body>
+</html>

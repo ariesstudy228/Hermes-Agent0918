@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>菜單｜Johnny JP 日式料理・中環</title>
+<meta name="description" content="Johnny JP 完整菜單：前菜、壽司與刺身、板前會席、備長炭火燒、炊飯與甜點。地址：香港中環威靈頓街 88 號。訂座電話 +852 2888 9988。">
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --paper: #fffdf9;
+    --ink: #1f2421;
+    --ink-2: #5b6058;
+    --ink-3: #8a8f86;
+    --wood: #8a6f4d;
+    --accent: #9c3b2a;
+    --gold: #b98c3f;
+    --line: #e3ddd2;
+    --dark: #14110d;
+    --dark-2: #1d1915;
+    --serif: "Noto Serif TC", "Noto Serif", "Songti TC", "PMingLiU", Georgia, serif;
+    --sans: "Noto Sans TC", "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.75 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; }
+  .wrap { width: min(1120px, 92vw); margin: 0 auto; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px 0; }
+  .brand { display: flex; align-items: baseline; gap: 10px; font-family: var(--serif); }
+  .brand b { font-size: 20px; letter-spacing: .04em; }
+  .brand span { font-size: 12px; color: var(--ink-3); letter-spacing: .3em; }
+  .nav ul { display: flex; gap: 22px; font-size: 14px; color: var(--ink-2); list-style: none; margin: 0; padding: 0; }
+  .nav ul a:hover { color: var(--accent); }
+  .nav ul a.act { color: var(--accent); font-weight: 600; }
+  .nav .back { font-size: 13px; color: var(--ink-3); letter-spacing: .1em; }
+  .nav .back:hover { color: var(--accent); }
+
+  .menu-hero { padding: 72px 0 44px; border-bottom: 1px solid var(--line); }
+  .menu-hero .eyebrow { font-size: 12px; letter-spacing: .35em; color: var(--accent); margin-bottom: 14px; }
+  .menu-hero h1 { font-size: clamp(30px, 5vw, 46px); margin: 0 0 12px; }
+  .menu-hero p { color: var(--ink-2); max-width: 46em; margin: 0; }
+
+  .cat { padding: 56px 0; }
+  .cat + .cat { border-top: 1px solid var(--line); }
+  .cat-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .cat-head .no { font-family: var(--serif); font-size: 13px; color: var(--gold); letter-spacing: .2em; }
+  .cat-head h2 { font-size: clamp(22px, 3vw, 30px); margin: 0; }
+  .cat-sub { color: var(--ink-3); font-size: 14px; margin: 0 0 28px; }
+
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 48px; }
+  .item { padding: 14px 0; border-bottom: 1px dashed var(--line); }
+  .item-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .item h3 { font-size: 17px; margin: 0; }
+  .item .jp { font-size: 12px; color: var(--ink-3); display: block; letter-spacing: .12em; }
+  .item .price { font-family: var(--serif); font-size: 15px; color: var(--accent); white-space: nowrap; }
+  .item p { margin: 6px 0 0; font-size: 14px; color: var(--ink-2); }
+  .tag { display: inline-block; font-size: 10px; letter-spacing: .15em; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); padding: 2px 8px; margin-left: 8px; vertical-align: middle; }
+
+  .omakase {
+    background: var(--dark); color: #f3ede3; border-radius: 4px;
+    padding: 48px clamp(24px, 5vw, 56px); margin-top: 56px;
+  }
+  .omakase .cat-head h2 { color: #fff; }
+  .omakase .cat-sub { color: #9a938a; }
+  .omakase .item { border-bottom-color: color-mix(in srgb, #fff 14%, transparent); }
+  .omakase .item h3 { color: #fff; }
+  .omakase .item p { color: #b7b0a6; }
+  .omakase .item .price { color: var(--gold); }
+  .omakase .note { margin-top: 36px; padding-top: 24px; border-top: 1px solid color-mix(in srgb, #fff 16%, transparent); font-size: 13px; color: #9a938a; }
+
+  .menu-cta {
+    background: var(--paper); border: 1px solid var(--line);
+    padding: 40px; text-align: center; margin: 64px 0 0; border-radius: 4px;
+  }
+  .menu-cta h2 { margin: 0 0 8px; font-size: 26px; }
+  .menu-cta p { color: var(--ink-2); margin: 0 0 24px; }
+  .btn {
+    display: inline-block; padding: 14px 30px; border-radius: 2px;
+    font-size: 15px; letter-spacing: .08em; transition: transform .15s, box-shadow .15s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-ink { background: var(--ink); color: var(--paper); }
+  .btn-outline { border: 1.5px solid var(--ink); color: var(--ink); }
+
+  footer { background: var(--dark); color: #9a938a; margin-top: 80px; padding: 40px 0; font-size: 13px; }
+  .foot-row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { color: #d8d2c8; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 720px) {
+    .nav ul { display: none; }
+    .menu-grid { grid-template-columns: 1fr; gap: 0; }
+    .omakase { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="主導航">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html">
+      <b>Johnny&nbsp;JP</b><span>和食料亭</span>
+    </a>
+    <ul>
+      <li><a href="index.html#about">關於</a></li>
+      <li><a href="index.html#philosophy">理念</a></li>
+      <li><a class="act" href="menu.html">菜單</a></li>
+      <li><a href="index.html#visit">聯絡</a></li>
+    </ul>
+    <a class="back" href="index.html">← 返回首頁</a>
+  </div>
+</nav>
+
+<header class="menu-hero">
+  <div class="wrap">
+    <div class="eyebrow">MENU · 菜單</div>
+    <h1>當季菜單</h1>
+    <p>食材隨「旬」而變，以下為近期固定供應之項目。菜單價格另加服務費，實際供應以當日店內為準。</p>
+  </div>
+</header>
+<main class="wrap">
+
+<section class="cat">
+  <div class="cat-head"><span class="no">一</span><h2>前菜與小皿</h2></div>
+  <p class="cat-sub">開胃小品，開啟當季味覺旅程。</p>
+  <div class="menu-grid">
+    <div class="item"><div class="item-row"><h3>Johnny 特製沙拉<span class="jp">Salad</span></h3><span class="price">$88</span></div><p>鮮黃瓜、胡瓜泥、水葵、山葵油醋汁，清爽開場。</p></div>
+    <div class="item"><div class="item-row"><h3>炸蝦米豆腐串<span class="jp">Kakuniage</span></h3><span class="price">$98</span></div><p>蝦米、豆腐、香菇串炸，配醬油漬山葵，熱氣撲面。</p></div>
+    <div class="item"><div class="item-row"><h3>醬油渍牛舌薄切<span class="jp">Gyutan</span></h3><span class="price">$138</span></div><p>軟嫩牛舌薄切，醬油渍漬入味，佐鹽辛或山葵。</p></div>
+    <div class="item"><div class="item-row"><h3>當季魚干</h3><span class="price">$88</span></div><p>依旬更換：炙鰹、鹽胡瓜、昆布渍等。</p></div>
+    <div class="item"><div class="item-row"><h3>味噌湯<span class="jp">Ochazuke-style</span></h3><span class="price">$58</span></div><p>白味噌高湯，配海帶、豆芽、蒟蒻。</p></div>
+    <div class="item"><div class="item-row"><h3>生拌牛筋<span class="jp">Koro Nikomi</span></h3><span class="price">$108</span></div><p>微燉牛筋，Q 彈入味，佐柚子皮。</p></div>
+  </div>
+</section>
+
+<section class="cat">
+  <div class="cat-head"><span class="no">二</span><h2>壽司與刺身</h2></div>
+  <p class="cat-sub">嚴選日本每日空運海鮮，江戶前壽司技藝。</p>
+  <div class="menu-grid">
+    <div class="item"><div class="item-row"><h3>江戶前壽司拼盤（6 貫）<span class="tag">招牌</span></h3><span class="price">$228</span></div><p>依當日漁市而變：鮪、鯛、魽、中樸，配山葵漬。</p></div>
+    <div class="item"><div class="item-row"><h3>Johnny 熟成特上刺身盛合<span class="tag">必點</span></h3><span class="price">$398</span></div><p>獨家乾式熟成處理時令魚腩，精確控時控溫，鎖住魚油香氣並極致提昇鮮味。</p></div>
+    <div class="item"><div class="item-row"><h3>刺身四拼</h3><span class="price">$268</span></div><p>鯛、鮪、中樸、魽，每日鮮切。</p></div>
+    <div class="item"><div class="item-row"><h3>炙烤三文魚薄切<span class="jp">Aburi</span></h3><span class="price">$158</span></div><p>備長炭輕炙表面，油香與海鹽、山葵佐。</p></div>
+    <div class="item"><div class="item-row"><h3>海膽（馬糞）<span class="tag">限定</span></h3><span class="price">$288 / 兩</span></div><p>北海道馬糞海膽，依旬供應，鮮甜綿密。</p></div>
+    <div class="item"><div class="item-row"><h3>活鰻薄切</h3><span class="price">$128</span></div><p>生食等級活鰻，薄切蘸醬油，鮮味獨特。</p></div>
+  </div>
+</section>
+
+<section class="cat">
+  <div class="cat-head"><span class="no">三</span><h2>板前會席</h2></div>
+  <p class="cat-sub">主廚現場烹調，儀式感滿分。每套餐含前菜、壽司、燉烤、炊飯與甜點。</p>
+  <div class="omakase">
+    <div class="cat-head"><span class="no">Omakase</span><h2>板前主廚套餐</h2></div>
+    <p class="cat-sub">於板前席享用，由主廚逐一呈上當季創作。</p>
+    <div class="menu-grid">
+      <div class="item"><div class="item-row"><h3>會席套餐「旬」<span class="tag">人氣</span></h3><span class="price">$788 / 位</span></div><p>8 貫壽司＋烤物＋刺身＋燒物，配清酒或威士忌。</p></div>
+      <div class="item"><div class="item-row"><h3>會席套餐「極」</h3><span class="price">$1,188 / 位</span></div><p>主廚全自由創作，含限定海膽、鰻魚與和牛，全席 14 道菜。</p></div>
+      <div class="item"><div class="item-row"><h3>壽司專門「江戶前 15 貫」</h3><span class="price">$568 / 位</span></div><p>純壽司體驗，依漁市當日搭配，含山葵、飯糰與甜點。</p></div>
+      <div class="item"><div class="item-row"><h3>雙人饗宴</h3><span class="price">$1,688 / 組</span></div><p>兩位同享會席體驗，適合紀念日或商務。</p></div>
+    </div>
+    <div class="note">＊ 會席套餐需提前一日預約，每日數量有限。＊ 全席供應時間約 90 至 120 分鐘。</div>
+  </div>
+</section>
+
+<section class="cat">
+  <div class="cat-head"><span class="no">四</span><h2>備長炭火燒</h2></div>
+  <p class="cat-sub">備長炭直火，鎖住肉汁與焦香。</p>
+  <div class="menu-grid">
+    <div class="item"><div class="item-row"><h3>A5 鹿兒島和牛串烤</h3><span class="price">$128 / 串</span></div><p>牛小排、牛舌、薄切，備長炭炙燒。</p></div>
+    <div class="item"><div class="item-row"><h3>備長炭鰻魚<span class="tag">招牌</span></h3><span class="price">$288</span></div><p>活鰻雙重炭烤，刷醬兩次，外焦內嫩。</p></div>
+    <div class="item"><div class="item-row"><h3>雞皮串烤<span class="jp">Tori</span></h3><span class="price">$68 / 串</span></div><p>蜜醬雞皮，微焦脆皮。</p></div>
+    <div class="item"><div class="item-row"><h3>炭火烤白鱈魚</h3><span class="price">$238</span></div><p>鹽烤薄切，配山葵漬。</p></div>
+    <div class="item"><div class="item-row"><h3>烤扇貝（三枚）</h3><span class="price">$188</span></div><p>輕炙鎖汁，佐柚子鹽。</p></div>
+    <div class="item"><div class="item-row"><h3>火焰黑松露炙燒和牛塔塔<span class="tag">必點</span></h3><span class="price">$328</span></div><p>A5 級鹿兒島黑毛和牛配現刨黑松露與有機生蛋黃，桌邊炙燒帶出微微焦香。</p></div>
+  </div>
+</section>
+
+<section class="cat">
+  <div class="cat-head"><span class="no">五</span><h2>飯食與湯麵</h2></div>
+  <p class="cat-sub">米飯與麵食，一餐的滿足。</p>
+  <div class="menu-grid">
+    <div class="item"><div class="item-row"><h3>炭火慢烤醬燒鰻魚釜飯<span class="tag">招牌</span></h3><span class="price">$248</span></div><p>備長炭現烤活鰻配山形縣輝映米，土鍋慢燉至米粒吸滿精華，底層焦香鍋巴。</p></div>
+    <div class="item"><div class="item-row"><h3>鰹魚柴鱼丼</h3><span class="price">$168</span></div><p>柴鱼薄衣鋪滿，熱湯一潑，煙氣升騰。</p></div>
+    <div class="item"><div class="item-row"><h3>海膽丼</h3><span class="price">$368</span></div><p>馬糞海膽鋪滿米飯，鮮甜極致。</p></div>
+    <div class="item"><div class="item-row"><h3>豚骨味噌拉面<span class="jp">Ramen</span></h3><span class="price">$118</span></div><p>豚骨高湯 8 小時慢熬，味噌底，配叉燒。</p></div>
+    <div class="item"><div class="item-row"><h3>塩鮭拉面</h3><span class="price">$98</span></div><p>清爽鮭白湯底，細面。</p></div>
+    <div class="item"><div class="item-row"><h3>極上海膽海鮮太卷<span class="tag">必點</span></h3><span class="price">$288</span></div><p>北海道馬糞海膽、鮪魚蓉、三文魚籽與鮮甜牡丹蝦一併捲入，全店每桌必點。</p></div>
+  </div>
+</section>
+
+<section class="cat">
+  <div class="cat-head"><span class="no">六</span><h2>甜點與飲品</h2></div>
+  <p class="cat-sub">收尾與配酒。</p>
+  <div class="menu-grid">
+    <div class="item"><div class="item-row"><h3>黑芝麻豆腐慕絲</h3><span class="price">$88</span></div><p>焙茶奶油，低糖。</p></div>
+    <div class="item"><div class="item-row"><h3>抹茶芝士蛋糕</h3><span class="price">$108</span></div><p>宇治抹茶，輕乳酪底。</p></div>
+    <div class="item"><div class="item-row"><h3>當季水果冰沙</h3><span class="price">$88</span></div><p>白桃、蜜柑或荔枝，無加糖。</p></div>
+    <div class="item"><div class="item-row"><h3>抹茶拿鐵 / 焙茶</h3><span class="price">$68</span></div><p>宇治抹茶手點，或備長焙茶。</p></div>
+    <div class="item"><div class="item-row"><h3>日本清酒（瓶）</h3><span class="price">$328 起</span></div><p>純米、吟釀、大吟釀，依旬更換。</p></div>
+    <div class="item"><div class="item-row"><h3>威士忌（杯）</h3><span class="price">$188 起</span></div><p>山崎、白州、響等，佐和牛佳配。</p></div>
+  </div>
+</section>
+
+<div class="menu-cta">
+  <h2>準備好享用一席和食了？</h2>
+  <p>提前一日預約會席套餐，板前席每日僅 12 席。</p>
+  <a class="btn btn-ink" href="index.html#visit">訂座 →</a>
+  &nbsp;&nbsp;
+  <a class="btn btn-outline" href="index.html#top">返回首頁</a>
+</div>
+
+</main>
+<footer>
+  <div class="wrap foot-row">
+    <span>© 2026 Johnny JP · 香港中環威靈頓街 88 號地舖</span>
+    <span>
+      訂座 <a href="tel:+85228889988">+852 2888 9988</a> ·
+      <a href="https://wa.me/85298887766">WhatsApp</a> ·
+      <a href="index.html#top">返回首頁</a>
+    </span>
+  </div>
+</footer>
+</body>
+</html>
